@@ -4,7 +4,6 @@ var inputCity = document.getElementById("city-input");
 inputCity.addEventListener("change", handleChange);
 var selectedCity;
 function handleChange(e) {
-  // console.log(e.target.value)
   selectedCity = e.target.value;
 }
 
@@ -14,27 +13,31 @@ var lon;
 var currentTemperature;
 var currentHumidity;
 var currentWindSpeed;
+var searchHistory = {};
 
-async function getAllWeather() {
-
-if (!selectedCity) {
+async function getAllWeather(city = selectedCity) {
+console.log("city", city);
+if (!city) {
     alert("Please enter a city");
     return;
 }  
 document.getElementById("loader").setAttribute("style", "display: block");
-//update city
-  document.getElementById("current-city").textContent = selectedCity;
-// update date
+  document.getElementById("current-city").textContent = city;
   document.getElementById("current-date").textContent = dayjs().format("MM/DD/YYYY");
 
-
-
-
-
-  await getCoordinates(selectedCity).then(() => {
+  await getCoordinates(city).then(() => {
     getCurrentWeather();
     getUpcomingWeather();
     document.getElementById("loader").setAttribute("style", "display: none");
+    document.getElementById("city-input").value = "";
+
+    if (!searchHistory[city]) {
+      var searchEntryButton = createButton(city, `getAllWeather("${city}")`);
+      console.log("searchEntryButton", searchEntryButton)
+      document.getElementById("search-box").appendChild(searchEntryButton);
+      searchHistory[city] = true;
+    }
+    selectedCity = "";
   });
 }
 async function getCurrentWeather() {
@@ -107,4 +110,11 @@ async function getCoordinates(selectedCity) {
     lat = res[0].lat;
     lon = res[0].lon;
   });
+}
+
+function createButton(buttonText, onclickValue) {
+  var currentButton = document.createElement("button"); 
+  currentButton.innerText = buttonText; 
+  currentButton.setAttribute("onclick", onclickValue); 
+  return currentButton;
 }

@@ -19,7 +19,7 @@ body {
   padding: 10px;
 }
 
-.search-box {
+#search-box {
   border: 5px solid gray;
   align-items: center;
   margin-bottom: 10px;
