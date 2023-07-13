@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <script
+      src="https://kit.fontawesome.com/f8b097e9d1.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="header">
+      <h1>Weather Dashboard</h1>
+    </div>
+
+    <div class="container">
+      <div id="search-box">
+        <h2>Search for a City</h2>
+        <i class="fa-solid fa-location-dot"></i>
+        <input id="city-input" type="text" placeholder="Search for a City" />
+        <button id="search-city" class="fa-solid fa-magnifying-glass" onclick="getAllWeather()"></button>
+      </div>
+
+      <div id="main-dashboard">
+        <p id="loader">Loading...</p>
+        <div id="current-weather">
+          <div class="forecast-date"><span id="current-city"></span><span id="current-date"></span></div>
+          <div class="forecast-temp">Temp: <span id="current-temp"></span></div>
+          <div class="forecast-humidity">Humidity: <span id="current-humidity"></span></div>
+          <div class="forecast-wind">Wind: <span id="current-wind"></span></div>
+        </div>
+
+      <h2 id="forecast-weather-header">5-Day Forecast</h2>
+      <div id="forecast-weather" class="forecast-box">
+        <div class="day" id="day0">
+          <h3>Day 1</h3>
+          <p>Temp: <span id="temp-day-0"></span></p>
+          <p>Humidity: <span id="humidity-day-0"></span></p>
+          <p>Wind: <span id="wind-day-0"></span></p>
+        </div>
+        <div class="day" id="day1">
+          <h3>Day 2</h3>
+          <p>Temp: <span id="temp-day-1"></span></p>
+          <p>Humidity: <span id="humidity-day-1"></span></p>
+          <p>Wind: <span id="wind-day-1"></span></p>
+        </div>
+        <div class="day" id="day2">
+          <h3>Day 3</h3>
+          <p>Temp: <span id="temp-day-2"></span></p>
+          <p>Humidity: <span id="humidity-day-2"></span></p>
+          <p>Wind: <span id="wind-day-2"></span></p>
+        </div>
+        <div class="day" id="day3">
+          <h3>Day 4</h3>
+          <p>Temp: <span id="temp-day-3"></span></p>
+          <p>Humidity: <span id="humidity-day-3"></span></p>
+          <p>Wind: <span id="wind-day-3"></span></p>
+        </div>
+        <div class="day" id="day4">
+          <h3>Day 5</h3>
+          <p>Temp: <span id="temp-day-4"></span></p>
+          <p>Humidity: <span id="humidity-day-4"></span></p>
+          <p>Wind: <span id="wind-day-4"></span></p>
+        </div>
+    </div>
+  </div>
+  <script
+  src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+  integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+  crossorigin="anonymous"
+></script>
+    <script src="script.js"></script>
+  </body>
+</html>
