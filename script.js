@@ -2,13 +2,11 @@ var APIkey = "19c51255668e36926db7807f46f27e32";
 
 var inputCity = document.getElementById("city-input");
 inputCity.addEventListener("change", handleChange);
-var testCity;
+var selectedCity;
 function handleChange(e) {
   // console.log(e.target.value)
-  testCity = e.target.value;
+  selectedCity = e.target.value;
 }
-var testStateCode = "TX";
-var testCountryCode = "USA";
 
 var lat;
 var lon;
@@ -18,7 +16,21 @@ var currentHumidity;
 var currentWindSpeed;
 
 async function getAllWeather() {
-  await getCoordinates(testCity).then(() => {
+
+if (!selectedCity) {
+    alert("Please enter a city");
+    return;
+}  
+//update city
+  document.getElementById("current-city").textContent = selectedCity;
+// update date
+  document.getElementById("current-date").textContent = dayjs().format("MM/DD/YYYY");
+
+
+
+
+
+  await getCoordinates(selectedCity).then(() => {
     getCurrentWeather();
     getUpcomingWeather();
   });
@@ -33,25 +45,35 @@ async function getCurrentWeather() {
   currentTemperature = currentWeather.main.temp;
   currentHumidity = currentWeather.main.humidity;
   currentWindSpeed = currentWeather.wind.speed;
-  alert(currentTemperature);
-  alert(currentHumidity);
-  alert(currentWindSpeed);
+
+  // update temp
+  document.getElementById("current-temp").textContent = currentTemperature;
+//update humidity
+  document.getElementById("current-humidity").textContent = currentHumidity;
+//update wind speed
+  document.getElementById("current-wind").textContent = currentWindSpeed;
+
+  // update the display attribute to make it visible (it's hidden by default) 
+  document.getElementById("current-weather").setAttribute("style", "display: block");
+
 }
 
 async function getUpcomingWeather() {
-  console.log(testCity);
-
+  console.log(selectedCity);
+ 
   // console.log(lat, lon);
   var response = await fetch(
     `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}&units=imperial`
   );
   var weatherData = await response.json();
   console.log(weatherData);
+  var upcomingWeather = weatherData.list;
+  // update temp, humidity, wind speed for 5 days
 }
 
-async function getCoordinates(testCity) {
+async function getCoordinates(selectedCity) {
   var testing = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${testCity}&limit=1&appid=${APIkey}`
+    `http://api.openweathermap.org/geo/1.0/direct?q=${selectedCity}&limit=1&appid=${APIkey}`
   );
 
   await testing.json().then((res) => {
@@ -60,14 +82,3 @@ async function getCoordinates(testCity) {
     lon = res[0].lon;
   });
 }
-
-// getCurrentWeather()
-
-getUpcomingWeather() 
-
-// 5 day forecast for the city that was searched for in the search bar (use the lat and lon from the previous API call) (https://openweathermap.org/forecast5) (https://openweathermap.org/api/one-call-api) (https://openweathermap.org/api/hourly-forecast) 
-// UV index for the city that was searched for in the search bar (use the lat and lon from the previous API call) (https://openweathermap.org/api/uvi)  (https://openweathermap.org/api/one-call-api) (https://openweathermap.org/api/hourly-forecast) 
-// Save the city that was searched for in the search bar to local storage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
-// Display the city that was searched for in the search bar on the page (https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Traversing_an_HTML_table_with_JavaScript_and_DOM_Interfaces)
-// Display the current date on the page (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
-// Display the current weather conditions for the city that was searched for in the search bar on the page (https://openweathermap.org/current) (https://openweathermap.org/api/one-call-api) (https://openweathermap.org/api/hourly-forecast)
