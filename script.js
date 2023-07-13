@@ -21,6 +21,7 @@ if (!selectedCity) {
     alert("Please enter a city");
     return;
 }  
+document.getElementById("loader").setAttribute("style", "display: block");
 //update city
   document.getElementById("current-city").textContent = selectedCity;
 // update date
@@ -33,6 +34,7 @@ if (!selectedCity) {
   await getCoordinates(selectedCity).then(() => {
     getCurrentWeather();
     getUpcomingWeather();
+    document.getElementById("loader").setAttribute("style", "display: none");
   });
 }
 async function getCurrentWeather() {
@@ -46,14 +48,9 @@ async function getCurrentWeather() {
   currentHumidity = currentWeather.main.humidity;
   currentWindSpeed = currentWeather.wind.speed;
 
-  // update temp
   document.getElementById("current-temp").textContent = currentTemperature;
-//update humidity
   document.getElementById("current-humidity").textContent = currentHumidity;
-//update wind speed
   document.getElementById("current-wind").textContent = currentWindSpeed;
-
-  // update the display attribute to make it visible (it's hidden by default) 
   document.getElementById("current-weather").setAttribute("style", "display: block");
 
 }
@@ -68,7 +65,36 @@ async function getUpcomingWeather() {
   var weatherData = await response.json();
   console.log(weatherData);
   var upcomingWeather = weatherData.list;
-  // update temp, humidity, wind speed for 5 days
+
+  var weekDates = []; 
+  for (var i = 0; i < 5; i++) {
+    var date = dayjs().add(i + 1, "day")
+    weekDates.push(date);
+    document.getElementById(`day${i}`).querySelector("h3").textContent = date.format("MM/DD/YYYY");;
+  }
+  console.log("weekDates", weekDates[0]+" 15:00:00");
+
+  var startingIndex = upcomingWeather.map(function(e) { 
+    console.log("dt_txt", e.dt_txt);
+    return e.dt_txt; 
+  }).indexOf(weekDates[0].format("YYYY-MM-DD")+" 15:00:00");
+console.log("starting index", startingIndex);
+var dayElementIndex = 0;  
+  for (var i = startingIndex; i < upcomingWeather.length; i+=8) {
+    console.log("i", i);
+    var currentDay = upcomingWeather[i];
+    var currentDayTemperature = currentDay.main.temp;
+    var currentDayHumidity = currentDay.main.humidity;
+    var currentDayWind = currentDay.wind.speed;
+
+    document.querySelector(`#temp-day-${dayElementIndex}`).textContent = currentDayTemperature;
+    document.querySelector(`#humidity-day-${dayElementIndex}`).textContent = currentDayHumidity;
+    document.querySelector(`#wind-day-${dayElementIndex}`).textContent = currentDayWind;
+ dayElementIndex++;
+  }
+
+  document.getElementById("forecast-weather-header").setAttribute("style", "display: block");
+  document.getElementById("forecast-weather").setAttribute("style", "display: flex");
 }
 
 async function getCoordinates(selectedCity) {
